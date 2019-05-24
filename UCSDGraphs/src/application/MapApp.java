@@ -56,7 +56,7 @@ implements MapComponentInitializedListener {
 	protected GoogleMap map;
 	protected BorderPane bp;
 	protected Stage primaryStage;
-//test git
+
 	// CONSTANTS
 	private static final double MARGIN_VAL = 10;
 	private static final double FETCH_COMPONENT_WIDTH = 160.0;
