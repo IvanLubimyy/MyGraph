@@ -2,5 +2,14 @@
 <workingSetManager>
 <workingSet editPageId="org.eclipse.jdt.internal.ui.DynamicSourcesWorkingSet" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1558711349614_0" label="Java Main Sources" name="Java Main Sources"/>
 <workingSet editPageId="org.eclipse.jdt.internal.ui.DynamicSourcesWorkingSet" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1558711349723_1" label="Java Test Sources" name="Java Test Sources"/>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1558717971149_3" label="myGraph" name="myGraph">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/UCSDGraphs" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/UCSDGraphs" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/UCSDGraphs" type="4"/>
+</workingSet>
+<workingSet editPageId="org.eclipse.ui.resourceWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1558718568928_4" label="newMyProj" name="newMyProj"/>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1558711391489_2" label="Window Working Set" name="Aggregate for window 1558711391488"/>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1558718995272_5" label="Window Working Set" name="Aggregate for window 1558718995272"/>
+<mruList name="newMyProj"/>
+<mruList name="myGraph"/>
 </workingSetManager>
