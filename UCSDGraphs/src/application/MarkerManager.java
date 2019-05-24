@@ -9,6 +9,7 @@ package application;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import gmapsfx.javascript.event.UIEventType;
@@ -30,13 +31,16 @@ public class MarkerManager {
     private HashMap<geography.GeographicPoint, Marker> markerMap;
     private ArrayList<geography.GeographicPoint> markerPositions;
     private GoogleMap map;
+    private LinkedList<geography.GeographicPoint> markerPitPoints;
     protected static String startURL = "http://maps.google.com/mapfiles/kml/pal3/icon40.png";
     protected static String destinationURL = "http://maps.google.com/mapfiles/kml/pal2/icon5.png";
     protected static String SELECTED_URL = "http://maps.google.com/mapfiles/kml/paddle/ltblu-circle.png";
     protected static String markerURL = "http://maps.google.com/mapfiles/kml/paddle/blu-diamond-lv.png";
 	protected static String visURL = "http://maps.google.com/mapfiles/kml/paddle/red-diamond-lv.png";
+	protected static String	pitPointURL = "http://maps.google.com/mapfiles/kml/pal2/icon13.png";
     private Marker startMarker;
     private Marker destinationMarker;
+    private Marker pitPointMarker;
     private Marker selectedMarker;
     private DataSet dataSet;
     private LatLongBounds bounds;
@@ -51,6 +55,7 @@ public class MarkerManager {
     	this.selectManager = null;
         this.rv = null;
         markerPositions = null;
+        markerPitPoints = new LinkedList<geography.GeographicPoint>();
     }
     public MarkerManager(GoogleMap map, SelectManager selectManager) {
     	// TODO -- parameters?
@@ -121,6 +126,12 @@ public class MarkerManager {
 //        destinationMarker.setZIndex(STRTDEST_Z);
         changeIcon(destinationMarker, destinationURL);
     }
+    
+    public void setPitPoint(geography.GeographicPoint point) {
+    	pitPointMarker = markerMap.get(point);
+    	markerPitPoints.add(point);
+    	changeIcon(pitPointMarker, pitPointURL);
+    }
 
     public void changeIcon(Marker marker, String url) {
         marker.setVisible(false);
@@ -187,7 +198,7 @@ public class MarkerManager {
         Iterator<geography.GeographicPoint> it = markerMap.keySet().iterator();
         while(it.hasNext()) {
             Marker marker = markerMap.get(it.next());
-            if(marker != startMarker && marker != destinationMarker) {
+            if(marker != startMarker && marker != destinationMarker && ! markerPitPoints.contains((geography.GeographicPoint)it)) {
                 marker.setVisible(false);
             }
 //        	map.addMarker(marker);

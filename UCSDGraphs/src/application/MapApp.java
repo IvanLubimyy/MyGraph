@@ -103,18 +103,24 @@ implements MapComponentInitializedListener {
 		Button hideRouteButton = new Button("Hide Route");
 		Button resetButton = new Button("Reset");
 		Button visualizationButton = new Button("Start Visualization");
+		Button pitPointButton = new Button("Pit Points");
 		Image sImage = new Image(MarkerManager.startURL);
 		Image dImage = new Image(MarkerManager.destinationURL);
+		Image pImage = new Image(MarkerManager.pitPointURL);
 		CLabel<geography.GeographicPoint> startLabel = new CLabel<geography.GeographicPoint>("Empty.", new ImageView(sImage), null);
 		CLabel<geography.GeographicPoint> endLabel = new CLabel<geography.GeographicPoint>("Empty.", new ImageView(dImage), null);
+		CLabel<geography.GeographicPoint> pitLabel = new CLabel<geography.GeographicPoint>("Empty.", new ImageView(pImage), null);
+		
 		//TODO -- hot fix
 		startLabel.setMinWidth(180);
 		endLabel.setMinWidth(180);
+		pitLabel.setMinWidth(180);
 		//        startLabel.setWrapText(true);
 		//        endLabel.setWrapText(true);
 		Button startButton = new Button("Start");
 		Button destinationButton = new Button("Dest");
-
+		Button pitButton = new Button("PitPoint");
+		
 		// Radio buttons for selecting search algorithm
 		final ToggleGroup group = new ToggleGroup();
 
