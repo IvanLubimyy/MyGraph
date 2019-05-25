@@ -456,7 +456,7 @@ public class MapGraph {
 	{
 		// TODO: Implement this method in WEEK 6
 		List<GeographicPoint> result = new LinkedList<GeographicPoint>();
-		List<GeographicPoint> betWeenTemp = new  LinkedList<GeographicPoint>(betWeen); // here we need deep copy.
+		List<GeographicPoint> betWeenTemp = greedySort(start, goal, betWeen); 
 		// TODO add sorting/mixing method for this list to produce lists for route optimization
 		
 		betWeenTemp.add(0, start);
@@ -484,6 +484,32 @@ public class MapGraph {
 	}
 
 	
+	private List<GeographicPoint>  greedySort(GeographicPoint start, GeographicPoint goal, List<GeographicPoint> betWeen) {
+		// TODO Auto-generated method stub
+		List<GeographicPoint> result = new LinkedList<GeographicPoint>();
+		List<GeographicPoint> sortingList = new LinkedList<GeographicPoint>(betWeen);
+
+		GeographicPoint our = start;
+		GeographicPoint curr = null;
+		
+		while (!sortingList.isEmpty()) {
+			double dist = 10000000.;
+			for (GeographicPoint n : sortingList) {
+				Double otherDist = our.distance(n);
+				if (otherDist < dist) {
+					curr = n;
+				}
+			}
+			if (curr != null) {
+				result.add(curr);	
+				sortingList.remove(curr);
+				our = curr;
+			}
+		}
+		
+		return result; 
+	}
+
 	public static void main(String[] args)
 	{
 		System.out.print("Making a new map...");
