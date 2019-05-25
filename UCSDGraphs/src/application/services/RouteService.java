@@ -102,12 +102,14 @@ public class RouteService {
         	if(markerManager.getVisualization() != null) {
         		markerManager.clearVisualization();
         	}
-
         	if(toggle == RouteController.DIJ || toggle == RouteController.A_STAR ||
         			toggle == RouteController.BFS) {
         		markerManager.initVisualization();
             	Consumer<geography.GeographicPoint> nodeAccepter = markerManager.getVisualization()::acceptPoint;
             	List<geography.GeographicPoint> path = null;
+            	if(markerManager.getPitPoints().size()>0) {
+            		path =  markerManager.getDataSet().getGraph().TSSearch(start, end, markerManager.getPitPoints(), nodeAccepter);
+            	}else
             	if (toggle == RouteController.BFS) {
             		path = markerManager.getDataSet().getGraph().bfs(start, end, nodeAccepter);
             	}

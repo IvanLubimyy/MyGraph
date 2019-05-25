@@ -140,8 +140,9 @@ implements MapComponentInitializedListener {
 		manager.setPointLabel(pointLabel);
 		manager.setStartLabel(startLabel);
 		manager.setDestinationLabel(endLabel);
-		setupRouteTab(routeTab, fetchBox, startLabel, endLabel, pointLabel, routeButton, hideRouteButton,
-				resetButton, visualizationButton, startButton, destinationButton, searchOptions);
+		manager.setPitPointLabel(pitLabel);
+		setupRouteTab(pitLabel, routeTab, fetchBox, startLabel, endLabel, pointLabel, routeButton, hideRouteButton,
+				resetButton, visualizationButton, startButton, destinationButton, searchOptions, pitPointButton, markerManager);
 
 		// add tabs to pane, give no option to close
 		TabPane tp = new TabPane(routeTab);
@@ -153,8 +154,8 @@ implements MapComponentInitializedListener {
 			RouteService rs = new RouteService(mapComponent, markerManager);
 			//System.out.println("in map ready : " + this.getClass());
 			// initialize controllers
-			new RouteController(rs, routeButton, hideRouteButton, resetButton, startButton, destinationButton, group, searchOptions, visualizationButton,
-					startLabel, endLabel, pointLabel, manager, markerManager);
+			new RouteController(pitPointButton, rs, routeButton, hideRouteButton, resetButton, startButton, destinationButton, group, searchOptions, visualizationButton,
+					startLabel, endLabel, pointLabel, manager, markerManager, pitLabel);
 			new FetchController(gs, rs, tf, fetchButton, cb, displayButton);
 		});
 
@@ -244,11 +245,12 @@ implements MapComponentInitializedListener {
 	 * Setup layout of route tab and controls
 	 *
 	 * @param routeTab
+	 * @param markerManager 
 	 * @param box
 	 */
-	private void setupRouteTab(Tab routeTab, VBox fetchBox, Label startLabel, Label endLabel, Label pointLabel,
+	private void setupRouteTab(Label pitLabel, Tab routeTab, VBox fetchBox, Label startLabel, Label endLabel, Label pointLabel,
 			Button showButton, Button hideButton, Button resetButton, Button vButton, Button startButton,
-			Button destButton, List<RadioButton> searchOptions) {
+			Button destButton, List<RadioButton> searchOptions, Button pitPointButton, MarkerManager markerManager) {
 
 		//set up tab layout
 		HBox h = new HBox();
@@ -259,7 +261,6 @@ implements MapComponentInitializedListener {
 
 
 		VBox selectLeft = new VBox();
-
 
 		selectLeft.getChildren().add(startLabel);
 		HBox startBox = new HBox();
@@ -272,15 +273,18 @@ implements MapComponentInitializedListener {
 		destinationBox.getChildren().add(destButton);
 		destinationBox.setSpacing(20);
 
+		HBox pitPointBox = new HBox();
+		pitLabel.setText(String.valueOf(markerManager.getPitPoints().size()));
+		pitPointBox.getChildren().add(pitLabel);
+		pitPointBox.getChildren().add(pitPointButton);
+		pitPointBox.setSpacing(20);
 
 		VBox markerBox = new VBox();
 		Label markerLabel = new Label("Selected Marker : ");
 
-
 		markerBox.getChildren().add(markerLabel);
-
 		markerBox.getChildren().add(pointLabel);
-
+		
 		VBox.setMargin(markerLabel, new Insets(MARGIN_VAL,MARGIN_VAL,MARGIN_VAL,MARGIN_VAL));
 		VBox.setMargin(pointLabel, new Insets(0,MARGIN_VAL,MARGIN_VAL,MARGIN_VAL));
 		VBox.setMargin(fetchBox, new Insets(0,0,MARGIN_VAL*2,0));
@@ -295,6 +299,9 @@ implements MapComponentInitializedListener {
 		v.getChildren().add(startBox);
 		v.getChildren().add(new Label("Goal : "));
 		v.getChildren().add(destinationBox);
+		v.getChildren().add(new Label("Pit Points : "));
+		v.getChildren().add(pitPointBox);
+		
 		v.getChildren().add(showHideBox);
 		for (RadioButton rb : searchOptions) {
 			v.getChildren().add(rb);
@@ -304,7 +311,7 @@ implements MapComponentInitializedListener {
 		VBox.setMargin(vButton, new Insets(MARGIN_VAL,MARGIN_VAL,MARGIN_VAL,MARGIN_VAL));
 		vButton.setDisable(true);
 		v.getChildren().add(markerBox);
-		//v.getChildren().add(resetButton);
+		v.getChildren().add(resetButton);
 
 
 		routeTab.setContent(h);

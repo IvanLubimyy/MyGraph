@@ -128,9 +128,11 @@ public class MarkerManager {
     }
     
     public void setPitPoint(geography.GeographicPoint point) {
-    	pitPointMarker = markerMap.get(point);
-    	markerPitPoints.add(point);
-    	changeIcon(pitPointMarker, pitPointURL);
+    	if(!markerPitPoints.contains(point)) {
+    		pitPointMarker = markerMap.get(point);
+    		markerPitPoints.add(point);
+    		changeIcon(pitPointMarker, pitPointURL);
+    	}
     }
 
     public void changeIcon(Marker marker, String url) {
@@ -145,9 +147,10 @@ public class MarkerManager {
     public void restoreMarkers() {
     	Iterator<geography.GeographicPoint> it = markerMap.keySet().iterator();
         while(it.hasNext()) {
-            Marker marker = markerMap.get(it.next());
+        	geography.GeographicPoint nn = it.next();
+            Marker marker = markerMap.get(nn);
             // destination marker needs to be added because it is added in javascript
-            if(marker != startMarker) {
+            if(marker != startMarker && !markerPitPoints.contains(nn)) {
                 marker.setVisible(false);
                 marker.setVisible(true);
             }
@@ -184,6 +187,10 @@ public class MarkerManager {
     public boolean getSelectMode() {
     	return selectMode;
     }
+    public LinkedList<geography.GeographicPoint> getPitPoints() {
+    	return markerPitPoints;
+    }
+    
     public static MarkerOptions createDefaultOptions(LatLong coord) {
         	MarkerOptions markerOptions = new MarkerOptions();
         	markerOptions.animation(null)
@@ -197,8 +204,9 @@ public class MarkerManager {
     public void hideIntermediateMarkers() {
         Iterator<geography.GeographicPoint> it = markerMap.keySet().iterator();
         while(it.hasNext()) {
-            Marker marker = markerMap.get(it.next());
-            if(marker != startMarker && marker != destinationMarker && ! markerPitPoints.contains((geography.GeographicPoint)it)) {
+        	geography.GeographicPoint nn = it.next();
+            Marker marker = markerMap.get(nn);
+            if(marker != startMarker && marker != destinationMarker &&  !markerPitPoints.contains((geography.GeographicPoint) nn)) {
                 marker.setVisible(false);
             }
 //        	map.addMarker(marker);
@@ -256,7 +264,7 @@ public class MarkerManager {
             //System.out.println("Clicked Marker : " + point.toString());
             if(selectMode) {
                 	if(selectedMarker != null && selectedMarker != startMarker
-                	   && selectedMarker != destinationMarker) {
+                	   && selectedMarker != destinationMarker && ! markerPitPoints.contains(selectedMarker) ) {
                 		selectedMarker.setIcon(markerURL);
 //                		selectedMarker.setZIndex(DEFAULT_Z);
                 	}

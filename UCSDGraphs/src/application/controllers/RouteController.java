@@ -45,22 +45,26 @@ public class RouteController {
     private Button resetButton;
     private Button destinationButton;
     private Button visualizationButton;
+    private Button pitPointButton;
 
+    
     private ToggleGroup group;
     private CLabel<geography.GeographicPoint> startLabel;
     private CLabel<geography.GeographicPoint> endLabel;
     private CLabel<geography.GeographicPoint> pointLabel;
+    private CLabel<geography.GeographicPoint> pitPointLabel;
     private SelectManager selectManager;
     private MarkerManager markerManager;
 
 
 
-	public RouteController(RouteService routeService, Button displayButton, Button hideButton,
+	public RouteController(Button pitPointButton, RouteService routeService, Button displayButton, Button hideButton,
 						   Button resetButton, Button startButton, Button destinationButton,
 						   ToggleGroup group, List<RadioButton> searchOptions, Button visualizationButton,
 						   CLabel<geography.GeographicPoint> startLabel, CLabel<geography.GeographicPoint> endLabel,
-						   CLabel<geography.GeographicPoint> pointLabel, SelectManager manager, MarkerManager markerManager) {
+						   CLabel<geography.GeographicPoint> pointLabel, SelectManager manager, MarkerManager markerManager, CLabel<geography.GeographicPoint> pitPointLabel) {
         // save parameters
+		this.pitPointButton = pitPointButton;
         this.routeService = routeService;
 		this.displayButton = displayButton;
         this.hideButton = hideButton;
@@ -76,6 +80,7 @@ public class RouteController {
         this.pointLabel = pointLabel;
         this.selectManager = manager;
         this.markerManager = markerManager;
+        this.pitPointLabel = pitPointLabel;
 
         setupDisplayButtons();
         setupRouteButtons();
@@ -121,6 +126,11 @@ public class RouteController {
 
         destinationButton.setOnAction( e-> {
             selectManager.setDestination();
+        });
+        
+        pitPointButton.setOnAction( e-> {
+            selectManager.setPitPoint();
+            //selectedToggle = A_STAR;
         });
     }
 
