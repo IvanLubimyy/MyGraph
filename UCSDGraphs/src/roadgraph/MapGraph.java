@@ -15,6 +15,9 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Consumer;
+
+import application.MapApp;
+
 import java.util.Collections;
 //import java.util.ArrayList;
 import java.util.HashMap;
@@ -460,9 +463,19 @@ public class MapGraph {
 		betWeenTemp.add(goal);
 		int n = 2;
 		while (n <= betWeenTemp.size()) {
-			result.addAll(searchHelper(1, betWeenTemp.get(n-2), betWeenTemp.get(n-1), nodeSearched));
-			result.remove(result.size()-1); // remove last, it will be added later again 
-			n++;
+			List<GeographicPoint> TempRoute = searchHelper(1, betWeenTemp.get(n-2), betWeenTemp.get(n-1), nodeSearched);
+			if(TempRoute != null) {
+				result.addAll(TempRoute);
+				result.remove(result.size()-1); // remove last, it will be added later again 
+				n++;
+			}
+            else {
+            	MapApp.showErrorAlert("Route Error: can't find the path! ",
+            					"Make sure to choose points on the roads: "+ 
+            					betWeenTemp.get(n-2).toString()+" -> "+ 
+            					betWeenTemp.get(n-1).toString());
+            	return null;
+            }
 		}
 		result.add(goal);
 		// TODO add method for graduation of competition betweenLists
