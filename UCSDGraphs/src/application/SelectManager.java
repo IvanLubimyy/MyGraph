@@ -107,7 +107,13 @@ public class SelectManager {
         	}
 		}
 	}
-
+	
+	public void clearPitPoints(){
+        markerManager.resetPitPoints();	
+        if(pitPointLabel != null) {
+        	pitPointLabel.setText(String.valueOf(markerManager.getPitPoints().size()));
+        }
+    }
 
 
 }

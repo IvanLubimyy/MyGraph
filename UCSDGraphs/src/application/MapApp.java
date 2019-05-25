@@ -101,7 +101,7 @@ implements MapComponentInitializedListener {
 		// create components for fetch tab
 		Button routeButton = new Button("Show Route");
 		Button hideRouteButton = new Button("Hide Route");
-		Button resetButton = new Button("Reset");
+		Button resetButton = new Button("Clear Pit Points");
 		Button visualizationButton = new Button("Start Visualization");
 		Button pitPointButton = new Button("Pit Points");
 		Image sImage = new Image(MarkerManager.startURL);
@@ -277,6 +277,7 @@ implements MapComponentInitializedListener {
 		pitLabel.setText(String.valueOf(markerManager.getPitPoints().size()));
 		pitPointBox.getChildren().add(pitLabel);
 		pitPointBox.getChildren().add(pitPointButton);
+
 		pitPointBox.setSpacing(20);
 
 		VBox markerBox = new VBox();
@@ -292,6 +293,8 @@ implements MapComponentInitializedListener {
 		HBox showHideBox = new HBox();
 		showHideBox.getChildren().add(showButton);
 		showHideBox.getChildren().add(hideButton);
+		showHideBox.getChildren().add(resetButton);
+
 		showHideBox.setSpacing(2*MARGIN_VAL);
 
 		v.getChildren().add(fetchBox);
@@ -299,7 +302,7 @@ implements MapComponentInitializedListener {
 		v.getChildren().add(startBox);
 		v.getChildren().add(new Label("Goal : "));
 		v.getChildren().add(destinationBox);
-		v.getChildren().add(new Label("Pit Points : "));
+		v.getChildren().add(new Label("Pit Points (A*-only) : "));
 		v.getChildren().add(pitPointBox);
 		
 		v.getChildren().add(showHideBox);
@@ -311,7 +314,6 @@ implements MapComponentInitializedListener {
 		VBox.setMargin(vButton, new Insets(MARGIN_VAL,MARGIN_VAL,MARGIN_VAL,MARGIN_VAL));
 		vButton.setDisable(true);
 		v.getChildren().add(markerBox);
-		v.getChildren().add(resetButton);
 
 
 		routeTab.setContent(h);

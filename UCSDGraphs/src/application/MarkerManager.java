@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import geography.GeographicPoint;
 import gmapsfx.javascript.event.UIEventType;
 import gmapsfx.javascript.object.Animation;
 import gmapsfx.javascript.object.GoogleMap;
@@ -191,6 +192,14 @@ public class MarkerManager {
     	return markerPitPoints;
     }
     
+    public void resetPitPoints() {
+       	for (GeographicPoint nn : getPitPoints()) {
+       		Marker markerToClear = markerMap.get(nn);
+       		markerToClear.setIcon(markerURL);
+       	}
+       	markerPitPoints.clear();
+     }
+    
     public static MarkerOptions createDefaultOptions(LatLong coord) {
         	MarkerOptions markerOptions = new MarkerOptions();
         	markerOptions.animation(null)
@@ -264,8 +273,8 @@ public class MarkerManager {
             //System.out.println("Clicked Marker : " + point.toString());
             if(selectMode) {
                 	if(selectedMarker != null && selectedMarker != startMarker
-                	   && selectedMarker != destinationMarker && ! markerPitPoints.contains(selectedMarker) ) {
-                		selectedMarker.setIcon(markerURL);
+                	   && selectedMarker != destinationMarker && selectedMarker != pitPointMarker ) {
+                		selectedMarker.setIcon(markerURL); //markerPitPoints.contains(
 //                		selectedMarker.setZIndex(DEFAULT_Z);
                 	}
             	selectManager.setPoint(point, marker);

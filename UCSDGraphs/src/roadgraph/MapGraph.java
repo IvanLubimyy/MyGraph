@@ -453,7 +453,7 @@ public class MapGraph {
 	{
 		// TODO: Implement this method in WEEK 6
 		List<GeographicPoint> result = new LinkedList<GeographicPoint>();
-		List<GeographicPoint> betWeenTemp = betWeen; // here we need deep copy.
+		List<GeographicPoint> betWeenTemp = new  LinkedList<GeographicPoint>(betWeen); // here we need deep copy.
 		// TODO add sorting/mixing method for this list to produce lists for route optimization
 		
 		betWeenTemp.add(0, start);

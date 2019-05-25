@@ -107,8 +107,9 @@ public class RouteController {
 
         //TODO -- implement
         resetButton.setOnAction( e -> {
-
-            routeService.reset();
+        	selectManager.clearPitPoints();
+        	//markerManager.resetPitPoints();
+            //routeService.reset();
         });
 	}
 

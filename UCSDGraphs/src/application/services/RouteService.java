@@ -89,6 +89,7 @@ public class RouteService {
             routeLine = null;
     	}
     }
+   
 
     public void reset() {
         removeRouteLine();
