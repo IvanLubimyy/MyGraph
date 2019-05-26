@@ -444,6 +444,7 @@ public class MapGraph {
 	
 	/** Find the path from start to goal through between points 
 	 * This path must be optimized by distance (TSP - the Travelling Salesperson Problem)
+	 * There are greedy algorithm with 2-Optimization
 	 * 
 	 * @param start The starting location
 	 * @param goal The goal location
@@ -457,11 +458,79 @@ public class MapGraph {
 	{
 		// TODO: Implement this method in WEEK 6
 		List<GeographicPoint> result = new LinkedList<GeographicPoint>();
-		List<GeographicPoint> betWeenTemp = greedySort(start, goal, betWeen); 
-		// TODO add sorting/mixing method for this list to produce lists for route optimization
+		List<GeographicPoint> betWeenTemp = greedySort(start, goal, betWeen); //greedy sorting
+		List<GeographicPoint> bestList = new LinkedList<GeographicPoint>();
+		List<GeographicPoint> listTemp = new LinkedList<GeographicPoint>();
+		Double dist = 10000000000.;
 		
-		betWeenTemp.add(0, start);
-		betWeenTemp.add(goal);
+		int i = 0;  // 1000 - not use // 0 - use optimization
+		boolean pr = true;
+		
+		// TODO add sorting/mixing method for this list to produce lists for route optimization
+		while (pr == true) {
+			// if we have only 1 pitPoint or no one, then we done loop
+			if(betWeenTemp.size()<2) {
+				pr = false;
+				i = 1000;
+			}	
+			// if we came with i to Last PitPoints, then we done shuffling 
+			if (i > betWeenTemp.size()-2) {
+				pr = false;
+				i = 1000;
+			}
+			
+			listTemp.clear();
+			
+			// shuffle with i - position
+			listTemp.addAll(shufflePoints(betWeenTemp, i));
+			i++;
+			
+			listTemp.add(0, start);
+			listTemp.add(goal);
+			
+			List<GeographicPoint> TempRoute = findRouteBySegmens(listTemp, nodeSearched );
+			// TODO add method for graduation of competition betweenLists
+			Double dist1 = routeDistance(TempRoute);
+			if (dist1 < dist) {
+				dist = dist1;
+				result = TempRoute;
+			}
+		}
+		return	result;
+	}
+
+	// shuffle Geographic Points with specific position + 1 next
+	public List<GeographicPoint> shufflePoints(List<GeographicPoint> listToShuffle, int position) {
+		
+		List<GeographicPoint> result = new LinkedList<GeographicPoint>();
+		
+		if (listToShuffle.size() == 0) {
+			return result;
+		}
+		if (listToShuffle.size() == 1) {
+			result.addAll(listToShuffle);
+			return result;
+		}
+		if (position > listToShuffle.size()-2){
+			result.addAll(listToShuffle);
+			return result;
+		}
+	
+		result.addAll(listToShuffle);
+		
+		result.remove(position+1);
+		GeographicPoint p2 = listToShuffle.get(position+1);
+		result.add(position, p2);
+		
+		return result;
+	}
+	
+	// helper method to find route by it's pitPoints 
+	private List<GeographicPoint> findRouteBySegmens(List<GeographicPoint> betWeenTemp, Consumer<GeographicPoint> nodeSearched) {
+		
+		List<GeographicPoint> result = new LinkedList<GeographicPoint>();
+		GeographicPoint goal = betWeenTemp.get(betWeenTemp.size()-1);
+		
 		int n = 2;
 		while (n <= betWeenTemp.size()) {
 			List<GeographicPoint> TempRoute = searchHelper(1, betWeenTemp.get(n-2), betWeenTemp.get(n-1), nodeSearched);
@@ -479,17 +548,17 @@ public class MapGraph {
             }
 		}
 		result.add(goal);
-		// TODO add method for graduation of competition betweenLists
 		
-		return	result;
+		
+		return result;
 	}
-
-	
+	// Sorting list of GeographicPoint by greedy algorithm
 	private List<GeographicPoint>  greedySort(GeographicPoint start, GeographicPoint goal, List<GeographicPoint> betWeen) {
-		// TODO Auto-generated method stub
+		
 		List<GeographicPoint> result = new LinkedList<GeographicPoint>();
-		List<GeographicPoint> sortingList = new LinkedList<GeographicPoint>(betWeen);
-
+		List<GeographicPoint> sortingList = new LinkedList<GeographicPoint>();
+		sortingList.addAll(betWeen);
+		
 		GeographicPoint our = start;
 		GeographicPoint curr = null;
 		
@@ -499,6 +568,7 @@ public class MapGraph {
 				Double otherDist = our.distance(n);
 				if (otherDist < dist) {
 					curr = n;
+					dist = otherDist;
 				}
 			}
 			if (curr != null) {
@@ -514,6 +584,9 @@ public class MapGraph {
 	// calculate summary distance of the route
 	public double routeDistance(List<GeographicPoint> route) {
 		Double resDistance = 0.;
+		if(route == null) {
+			return resDistance;
+		}
 		if(route.isEmpty()) {
 			return resDistance;
 		}
