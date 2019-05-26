@@ -9,6 +9,7 @@ package roadgraph;
 
 
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -510,6 +511,26 @@ public class MapGraph {
 		return result; 
 	}
 
+	// calculate summary distance of the route
+	public double routeDistance(List<GeographicPoint> route) {
+		Double resDistance = 0.;
+		if(route.isEmpty()) {
+			return resDistance;
+		}
+		int counter = 0;
+		while (counter < route.size()) {
+			// if we have not next, then we done
+			if (counter+1 < route.size()) {
+				GeographicPoint p1 = route.get(counter);
+				GeographicPoint p2 = route.get(counter+1);
+				resDistance = resDistance + p1.distance(p2);
+			}
+			counter++;
+		}
+		
+		return resDistance;
+	}
+	
 	public static void main(String[] args)
 	{
 		System.out.print("Making a new map...");
