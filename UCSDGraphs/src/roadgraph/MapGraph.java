@@ -313,7 +313,7 @@ public class MapGraph {
 										  GeographicPoint goal, Consumer<GeographicPoint> nodeSearched)
 	{
 		// TODO: Implement this method in WEEK 4
-		return	searchHelper(0, start, goal, nodeSearched);
+		return	searchHelper(0, start, goal, nodeSearched, true);
 	}
 
 	/** Find the path from start to goal using A-Star search
@@ -341,7 +341,7 @@ public class MapGraph {
 											 GeographicPoint goal, Consumer<GeographicPoint> nodeSearched)
 	{
 		// TODO: Implement this method in WEEK 4
-		return	searchHelper(1, start, goal, nodeSearched);
+		return	searchHelper(1, start, goal, nodeSearched, true);
 	}
 
 	/** Find the path from start to goal using A-Star search or Dijkstra search
@@ -355,8 +355,8 @@ public class MapGraph {
 	 *   start to goal (including both start and goal).
 	 */
 	public List<GeographicPoint> searchHelper(int kindOfSort, GeographicPoint start, GeographicPoint goal,
-			Consumer<GeographicPoint> nodeSearched) {
-		int countP = 0;
+			Consumer<GeographicPoint> nodeSearched, boolean visualisationPoint ) {
+		
 		// TODO: Implement this method in WEEK 4
 		Node startN = findNode(start);
 		if (startN == null) {
@@ -393,11 +393,12 @@ public class MapGraph {
 			//if (kindOfSort!=0) {countP++; System.out.println(String.valueOf(countP)+" A-star point:"+curr.toString());}
 			
 			Double currDistance = curr.getDistFromStart();
-
+			
+			if (visualisationPoint == true) {
 			// Hook for visualization. See writeup.
 			// nodeSearched.accept(next.getLocation());
-			nodeSearched.accept((GeographicPoint) curr);
-
+				nodeSearched.accept((GeographicPoint) curr);
+			}
 			// if (curr is not visited)
 			if (!visited.contains(curr)) {
 
@@ -443,7 +444,7 @@ public class MapGraph {
 	}	
 	
 	/** Find the path from start to goal through between points 
-	 * This path must be optimized by distance (TSP - the Travelling Salesperson Problem)
+	 * This path must be optimized by distance (TSP - the Traveling Salesperson Problem)
 	 * There are greedy algorithm with 2-Optimization
 	 * 
 	 * @param start The starting location
@@ -455,7 +456,7 @@ public class MapGraph {
 	 */
 	public List<GeographicPoint> TSSearch(GeographicPoint start, 
 											 GeographicPoint goal, List<GeographicPoint> betWeen, Consumer<GeographicPoint> nodeSearched)
-	{
+	{	
 		// TODO: Implement this method in WEEK 6
 		List<GeographicPoint> result = new LinkedList<GeographicPoint>();
 		List<GeographicPoint> betWeenTemp = greedySort(start, goal, betWeen); //greedy sorting
@@ -488,14 +489,16 @@ public class MapGraph {
 			listTemp.add(0, start);
 			listTemp.add(goal);
 			
-			List<GeographicPoint> TempRoute = findRouteBySegmens(listTemp, nodeSearched );
+			List<GeographicPoint> TempRoute = findRouteBySegmens(listTemp, nodeSearched, false);
 			// TODO add method for graduation of competition betweenLists
 			Double dist1 = routeDistance(TempRoute);
 			if (dist1 < dist) {
 				dist = dist1;
 				result = TempRoute;
+				bestList = listTemp;
 			}
 		}
+			findRouteBySegmens(bestList, nodeSearched, true);
 		return	result;
 	}
 
@@ -526,14 +529,14 @@ public class MapGraph {
 	}
 	
 	// helper method to find route by it's pitPoints 
-	private List<GeographicPoint> findRouteBySegmens(List<GeographicPoint> betWeenTemp, Consumer<GeographicPoint> nodeSearched) {
+	private List<GeographicPoint> findRouteBySegmens(List<GeographicPoint> betWeenTemp, Consumer<GeographicPoint> nodeSearched, boolean visualisationPoint) {
 		
 		List<GeographicPoint> result = new LinkedList<GeographicPoint>();
 		GeographicPoint goal = betWeenTemp.get(betWeenTemp.size()-1);
 		
 		int n = 2;
 		while (n <= betWeenTemp.size()) {
-			List<GeographicPoint> TempRoute = searchHelper(1, betWeenTemp.get(n-2), betWeenTemp.get(n-1), nodeSearched);
+			List<GeographicPoint> TempRoute = searchHelper(1, betWeenTemp.get(n-2), betWeenTemp.get(n-1), nodeSearched, visualisationPoint);
 			if(TempRoute != null) {
 				result.addAll(TempRoute);
 				result.remove(result.size()-1); // remove last, it will be added later again 
